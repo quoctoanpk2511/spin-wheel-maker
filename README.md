@@ -23,7 +23,7 @@ You will need a browser to open the web application. The tool works with modern 
 1. **Clone the repository** (or you can make it easier by downloading the .zip file and extracting):
    - If you haven't cloned the repository yet, open your terminal and run the following command:
      ```bash
-     git clone https://github.com/yourusername/spin-wheel-maker.git
+     git clone https://github.com/quoctoanpk2511/spin-wheel-maker.git
      ```
    - Navigate to the directory:
      ```bash
@@ -49,12 +49,13 @@ You will need a browser to open the web application. The tool works with modern 
 ## File Requirements
 
 - The XLSX file must have the first row as the header.
-The id column will be the label displayed above the wheel.
-- Each subsequent row should contain the data points for the spin wheel, including the label and the weight.
+- The id column will be the label displayed above the wheel.
+- Each subsequent row should contain the data points for the spin wheel, including the title and the weight.
 
 ## Example File Format
 
-| id | Label      | Weight |
+The header needs to be set like the sample file.
+| id | title      | weight |
 |----|------------|--------|
 |1   | Option 1   | 1      |
 |2   | Option 2   | 3      |
