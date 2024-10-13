@@ -1,0 +1,101 @@
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spin Wheel App</title>
+  <style>
+    /* Hide element util script.js is run */
+    #spin-container {
+      display: none;
+    }
+  </style>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet" />
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- Upload file -->
+  <div class="upload-container">
+    <h3>Upload and Process Excel File</h3>
+    <div>
+      <input type="file" id="fileInput" />
+      <button id="uploadBtn">Upload</button>
+    </div>
+    <div id="status"></div>
+  </div>
+
+  <!-- Render spin wheel -->
+  <div id="spin-container" class="page-container">
+    <div class="wrapper">
+      <div class="container">
+        <canvas id="wheel"></canvas>
+        <button id="spin-btn">Spin</button>
+        <img src="./left-arrow.svg" alt="spinner arrow" />
+      </div>
+      <div id="final-value">
+        <p>Click On The Spin Button To Start</p>
+      </div>
+    </div>
+    <div class="table-wrapper">
+      <div class="table-list">
+        <table id="table-data">
+          <tr>
+            <td>No</td>
+            <td>Title</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <!-- Chart JS Plugin for displaying text over chart -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js"></script>
+  <!-- XLSX JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- Script -->
+  <script src="script.js"></script>
+
+  <script>
+    // Read xlsx file and convert to object
+    document.getElementById("uploadBtn").addEventListener("click", function () {
+      const fileInput = document.getElementById("fileInput");
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please select an XLSX file.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const data = new Uint8Array(event.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        // Convert worksheet to list object
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        // First row is header
+        const headers = jsonData[0];
+        // Slice header
+        const rows = jsonData.slice(1);
+        const objects = rows.map(row => {
+          let obj = {};
+          headers.forEach((header, index) => {
+            obj[header] = row[index];
+          });
+          return obj;
+        });
+        console.log(objects);
+        // Call script.js with objects as an argument
+        processFileData(objects);
+      };
+      // Read file in ArrayBuffer format
+      reader.readAsArrayBuffer(file);
+    });
+  </script>
+</body>
+
+</html>
