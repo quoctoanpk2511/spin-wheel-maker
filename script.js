@@ -125,6 +125,7 @@ function processFileData(jsonData) {
   let resultValue = 101;
   //Start spinning
   spinBtn.addEventListener("click", () => {
+    let audio = new Audio("./music2.mp3");
     spinBtn.disabled = true;
     //Empty final value
     finalValue.innerHTML = `<p>Good Luck!</p>`;
@@ -147,17 +148,21 @@ function processFileData(jsonData) {
       myChart.options.rotation = myChart.options.rotation + resultValue;
       //Update chart with new value;
       myChart.update();
+      audio.play();
       //If rotation>360 reset it back to 0
       if (myChart.options.rotation >= 360) {
         count += 1;
         resultValue -= 5;
         myChart.options.rotation = 0;
       } else if (count > 15 && myChart.options.rotation == randomDegree) {
+        audio.pause();
         valueGenerator(randomDegree);
         clearInterval(rotationInterval);
         count = 0;
         resultValue = 101;
+        new Audio('./success.mp3').play();
       }
+      // audio.play();
     }, 10);
   });
   document.getElementById("spin-container").style.display = "flex";
